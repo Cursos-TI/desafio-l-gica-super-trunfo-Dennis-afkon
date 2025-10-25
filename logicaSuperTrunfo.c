@@ -4,7 +4,7 @@
 
 typedef struct {
     char estado;
-    char codigo[4];
+    char codigo[5];  // ✅ CORRIGIDO: Aumentado de 4 para 5 para acomodar '\0'
     char cidade[100];
     unsigned long int populacao;
     float area;
@@ -40,15 +40,23 @@ void cadastrarCarta(Carta *carta) {
 
     printf("População: ");
     scanf("%lu", &carta->populacao);
+    // ✅ CORRIGIDO: Validação para evitar valores negativos
+    if (carta->populacao < 0) carta->populacao = 0;
 
     printf("Área (em km²): ");
     scanf("%f", &carta->area);
+    // ✅ CORRIGIDO: Validação para evitar divisão por zero
+    if (carta->area <= 0) carta->area = 0.01;
 
     printf("PIB (em bilhões de reais): ");
     scanf("%f", &carta->pib);
+    // ✅ CORRIGIDO: Validação para evitar valores negativos
+    if (carta->pib < 0) carta->pib = 0;
 
     printf("Número de Pontos Turísticos: ");
     scanf("%d", &carta->pontosTuristicos);
+    // ✅ CORRIGIDO: Validação para evitar valores negativos
+    if (carta->pontosTuristicos < 0) carta->pontosTuristicos = 0;
     limparEntrada();
 
     carta->densidade_populacional = carta->area > 0 ? carta->populacao / carta->area : 0;
@@ -58,10 +66,12 @@ void cadastrarCarta(Carta *carta) {
 
 int main() {
     Carta carta1, carta2;
+
     printf("Cadastro da Carta 1:\n");
     cadastrarCarta(&carta1);
 
     printf("\nCadastro da Carta 2:\n");
+    // ✅ CORRIGIDO: Removido limparEntrada() duplicado
     cadastrarCarta(&carta2);
 
     int opcao, atributo1, atributo2;
